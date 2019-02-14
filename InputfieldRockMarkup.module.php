@@ -15,10 +15,13 @@ class InputfieldRockMarkup extends InputfieldMarkup {
   
   public function renderReady(Inputfield $parent = null, $renderValueMode = false) {
     // load field-specific scripts and styles
-    if(is_file($this->getFilePath().$this->name.'.js'))
-      $this->config->scripts->add($this->getFileUrl().$this->name.'.js');
-    if(is_file($this->getFilePath().$this->name.'.css'))
-      $this->config->scripts->add($this->getFileUrl().$this->name.'.css');
+    $file = $this->getFilePath().$this->name.'.js';
+    if(is_file($file))
+      $this->config->scripts->add($this->getFileUrl().$this->name.'.js?t='.filemtime($file));
+      
+    $file = $this->getFilePath().$this->name.'.css';
+    if(is_file($file))
+      $this->config->scripts->add($this->getFileUrl().$this->name.'.css?t='.filemtime($file));
 
     return parent::renderReady($parent, $renderValueMode);
   }
