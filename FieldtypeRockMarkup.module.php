@@ -25,7 +25,6 @@ class FieldtypeRockMarkup extends Fieldtype {
    */
   public function getInputfield(Page $page, Field $field) {
     $f = $this->modules->get('InputfieldRockMarkup');
-    bd($this, 'getinputfield');
     // $f->label = 'foo';
     $f->skipLabel = Inputfield::skipLabelBlank;
     return $f;
