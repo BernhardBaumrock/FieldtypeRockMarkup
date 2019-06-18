@@ -52,6 +52,35 @@ $form->add([
 ]);
 ```
 
+## Setting the markup
+
+You can either output the markup directly:
+
+```php
+// mymarkup.php
+--- mymarkup.php ---
+```
+![img](https://i.imgur.com/MucL1Gt.png)
+
+Or via PHP `echo`
+
+```php
+// mymarkup.php
+<?php
+$foo = 'bar';
+echo 'Value of $foo is: <strong>' . $foo . '</strong>';
+```
+![img](https://i.imgur.com/u8289ag.png)
+
+Or via PHP `return`
+
+```php
+// mymarkup.php
+<?php namespace ProcessWire;
+return __FILE__;
+```
+![img](https://i.imgur.com/4zAYCy2.png)
+
 
 ## Misc
 
