@@ -2,30 +2,52 @@
 
 The Inputfield of this Fieldtype will render a file with the name of the field located in a specified folder. If no folder is specified it will look for the files in /site/assets/RockMarkup
 
-## Setting the file path
+## Usage
 
-You can either set the file path via a field's config screen, or if you are only using the Inputfield (for example in a ProcessModule) just set the `path` property:
+The simplest usage is to create a field and place a corresponding PHP file in the folder `/site/assets/RockMarkup`, for example:
+
+### Field in page edit screen
+
+* Create field `mymarkup`
+* Create file `/site/assets/RockMarkup/mymarkup.php`
+* Add field to a template
+
+### Field in a ProcessModule
 
 ```php
-  public function ___execute() {
-    /** @var InputfieldForm $form */
-    $form = $this->modules->get('InputfieldForm');
+public function ___execute() {
+  /** @var InputfieldForm $form */
+  $form = $this->modules->get('InputfieldForm');
 
-    $form->add([
-      'name' => 'demo',
-      'type' => 'RockMarkup',
-      'label' => 'RockMarkup Field With Custom Path',
-      'path' => 'site/templates/markupfields',
-    ]);
+  $form->add([
+    'name' => 'mymarkup',
+    'type' => 'RockMarkup',
+    'label' => 'My great markup field',
+  ]);
 
-    return $form->render();
-  }
+  return $form->render();
+}
 ```
 
-The field will then load all asset files that are stored in this folder and have the name of the field, in this case `demo`:
+This field will then render the contents of `/site/assets/RockMarkup/mymarkup.php`. It will also load corresponding JS and CSS files if available:
 
 ```
-/site/templates/markupfields/demo.php
-/site/templates/markupfields/demo.css
-/site/templates/markupfields/demo.js
+/site/assets/RockMarkup/mymarkup.php
+/site/assets/RockMarkup/mymarkup.css
+/site/assets/RockMarkup/mymarkup.js
+```
+
+## Setting a custom file path
+
+You can either set the file path via a field's config screen or just set the `path` property in your code:
+
+```php
+$form->add([
+  'name' => 'mymarkup',
+  'type' => 'RockMarkup',
+  'label' => 'RockMarkup Field With Custom Path',
+
+  // add custom path
+  'path' => 'site/templates/markupfields',
+]);
 ```
