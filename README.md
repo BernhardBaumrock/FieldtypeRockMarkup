@@ -51,3 +51,18 @@ $form->add([
   'path' => 'site/templates/markupfields',
 ]);
 ```
+
+
+## Misc
+
+### Hide the label of a field
+
+By default the Inputfield will render the field's name if no label is set. You can hide the label via the `hideLabel` property:
+
+```php
+$form->add([
+  'name' => 'mymarkup',
+  'type' => 'RockMarkup',
+  'hideLabel' => true,
+]);
+```

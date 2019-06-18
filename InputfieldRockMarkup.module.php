@@ -55,13 +55,18 @@ class InputfieldRockMarkup extends InputfieldMarkup {
    * @return void
    */
   public function ___render() {
+    if(!$this->label) {
+      // no label was set
+      // if label is not NULL we set the field name as label
+      if(!$this->hideLabel) $this->label = $this->name;
+    }
+
     // if a value was set return it
     if($this->value) $out = $this->value;
     else {
       // otherwise try to render the file
       try {
         $path = $this->getFilePath();
-        bd($path, 'path');
         $out = $this->files->render($path.$this->name, [], [
           'allowedPaths' => [$path],
         ]);
