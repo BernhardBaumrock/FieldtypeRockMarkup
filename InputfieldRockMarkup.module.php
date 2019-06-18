@@ -8,9 +8,32 @@
  */
 class InputfieldRockMarkup extends InputfieldMarkup {
 
-  // property to set the directory of the file to render
-  // by default this is not set and the default path is used
+  /**
+   * Property to set the directory of the file to render
+   * 
+   * By default this is not set and the default path is used.
+   *
+   * @var string
+   */
   public $path;
+
+  /**
+   * Default path of assets files
+   *
+   * @var string
+   */
+  public $defaultPath;
+
+  /**
+   * Init this module
+   *
+   * @return void
+   */
+  public function init() {
+    parent::init();
+    $folder = 'RockMarkup';
+    $this->defaultPath = $this->toPath($this->config->paths->assets . $folder);
+  }
 
   
   public function renderReady(Inputfield $parent = null, $renderValueMode = false) {
@@ -38,6 +61,7 @@ class InputfieldRockMarkup extends InputfieldMarkup {
       // otherwise try to render the file
       try {
         $path = $this->getFilePath();
+        bd($path, 'path');
         $out = $this->files->render($path.$this->name, [], [
           'allowedPaths' => [$path],
         ]);
@@ -71,10 +95,28 @@ class InputfieldRockMarkup extends InputfieldMarkup {
    * @return void
    */
   public function getFilePath() {
-    $name = str_replace("Inputfield", "", $this->className());
-    $path = $this->path ?: $this->config->paths->assets . $name;
-    $path = rtrim($path,"/")."/";
-    return $path;
+    // if no path is set we try to get the path from the fields config
+    $path = $this->path;
+    
+    // no path set, try to get it from field config
+    if(!$path) $path = $this->getPathFromFieldConfig();
+
+    // still no path, use default path
+    if(!$path) $path = $this->defaultPath;
+    
+    return $this->toPath($path);
+  }
+
+  /**
+   * Get path from field's config
+   *
+   * @return string|null
+   */
+  public function getPathFromFieldConfig() {
+    // try to get field
+    $field = $this->fields->get($this->name);
+    if(!$field) return;
+    return $field->path;
   }
 
   /**
@@ -83,7 +125,30 @@ class InputfieldRockMarkup extends InputfieldMarkup {
    * @return void
    */
   public function getFileUrl() {
-    $path = $this->getFilePath();
-    return str_replace($this->config->paths->root, $this->config->urls->root, $path);
+    return $this->toUrl($this->getFilePath());
+  }
+
+  /**
+   * Convert path to url relative to root
+   *
+   * @param string $path
+   * @return string
+   */
+  public function toUrl($path) {
+    $url = str_replace($this->config->paths->root, $this->config->urls->root, $path);
+    $url = ltrim($url, "/");
+    $url = rtrim($url,"/");
+    return "$url/";
+  }
+
+  /**
+   * Convert url to path and make sure it exists
+   *
+   * @param string $url
+   * @return string
+   */
+  public function toPath($url) {
+    $url = $this->toUrl($url);
+    return $this->config->paths->root.$url;
   }
 }

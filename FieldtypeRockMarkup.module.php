@@ -12,6 +12,7 @@ class FieldtypeRockMarkup extends Fieldtype {
    * module initialisation
    */
   public function init() {
+    $this->addHookAfter("InputfieldText(name=path)::processInput", $this, 'sanitizePath');
   }
 
   /**
@@ -25,11 +26,55 @@ class FieldtypeRockMarkup extends Fieldtype {
    */
   public function getInputfield(Page $page, Field $field) {
     $f = $this->modules->get('InputfieldRockMarkup');
-    // $f->label = 'foo';
     $f->skipLabel = Inputfield::skipLabelBlank;
     return $f;
   }
 
+  /**
+   * Sanitize path from user input
+   *
+   * @param HookEvent $event
+   * @return string
+   */
+  public function sanitizePath($event) {
+    $field = $event->object;
+    $f = $this->modules->get('InputfieldRockMarkup');
+
+    // value that was input by user
+    $val = $field->value;
+    if(!$val) return;
+    
+    // remove absolute path to root folder
+    $val = $f->toUrl($val);
+
+    // set new value
+    $field->value = $val;
+  }
+
+  /**
+   * Field configuration screen
+   * 
+   * @param Field $field
+   * @return InputfieldWrapper
+   *
+   */
+  public function ___getConfigInputfields(Field $field) {
+    $inputfields = parent::___getConfigInputfields($field);
+    $f = $this->modules->get('InputfieldRockMarkup');
+    $f->name = $field->name;
+
+    $inputfields->add([
+      'type' => 'text',
+      'name' => 'path',
+      'label' => $this->_('Custom File Path'),
+      'value' => $field->path,
+      'description' => $this->_('Relative to root folder, default is') . " " . $f->toUrl($f->defaultPath),
+      'notes' => $this->_('Current path') . ": " . $f->getFilePath(),
+    ]);
+
+    return $inputfields; 
+  }
+  
   /**
    * the formatted value of this field
    * necessary to render the grid's markup on the frontend
@@ -58,63 +103,19 @@ class FieldtypeRockMarkup extends Fieldtype {
    *
    */
 
-  public function ___wakeupValue(Page $page, Field $field, $value) {
-    return $value;
-  }
-
-  public function ___sleepValue(Page $page, Field $field, $value) {
-    return $value;
-  }
-
-  public function getLoadQuery(Field $field, DatabaseQuerySelect $query) {
-    // prevent loading from DB
-    return $query; 
-  }
-
-  public function ___loadPageField(Page $page, Field $field) {
-    // generate value at runtime rather than loading from DB
-    return null; 
-  }
-
-  public function ___savePageField(Page $page, Field $field) {
-    // prevent saving of field
-    return true;
-  }
-
-  public function ___deletePageField(Page $page, Field $field) {
-    // deleting of page field not necessary
-    return true; 
-  }
-
-  public function ___deleteField(Field $field) {
-    // deleting of field not necessary
-    return true; 
-  }
-
-  public function getDatabaseSchema(Field $field) {
-    // no database schema necessary
-    return array();
-  }
-
-  public function ___createField(Field $field) {
-    // nothing necessary to create the field
-    return true; 
-  }
-
+  public function ___wakeupValue(Page $page, Field $field, $value) { return $value; }
+  public function ___sleepValue(Page $page, Field $field, $value) { return $value; }
+  public function getLoadQuery(Field $field, DatabaseQuerySelect $query) { return $query; }
+  public function ___loadPageField(Page $page, Field $field) { return null; }
+  public function ___savePageField(Page $page, Field $field) { return true; }
+  public function ___deletePageField(Page $page, Field $field) { return true; }
+  public function ___deleteField(Field $field) { return true; }
+  public function getDatabaseSchema(Field $field) { return array(); }
+  public function ___createField(Field $field) { return true; }
   public function getMatchQuery($query, $table, $subfield, $operator, $value) {
-    // we don't allow this field to be queried
     throw new WireException("Field '{$query->field->name}' is runtime and not queryable");
   }
-  
-  public function ___getCompatibleFieldtypes(Field $field) {
-    // no fieldtypes are compatible
-    return new Fieldtypes();
-  }
-
-  public function getLoadQueryAutojoin(Field $field, DatabaseQuerySelect $query) {
-    // we don't allow this field to be autojoined
-    return null;
-  }
-
+  public function ___getCompatibleFieldtypes(Field $field) { return new Fieldtypes(); }
+  public function getLoadQueryAutojoin(Field $field, DatabaseQuerySelect $query) { return null; }
 }
 
