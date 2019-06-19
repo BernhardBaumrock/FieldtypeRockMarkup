@@ -161,6 +161,7 @@ class InputfieldRockMarkup extends InputfieldMarkup {
    * @return string
    */
   public function toUrl($path) {
+    $path = $this->config->urls->normalizeSeparators($path);
     $url = str_replace($this->config->paths->root, $this->config->urls->root, $path);
     $url = ltrim($url, "/");
     $url = rtrim($url,"/");

@@ -1,0 +1,21 @@
+<?php namespace ProcessWire;
+/** @var WireFileTools $this */
+$this->addHookBefore(
+  "InputfieldForm(name=renderExample)::render",
+  function(HookEvent $event) {
+    $form = $event->object; /** @var InputfieldForm $form */
+    $name = $this->input->get('name', 'text');
+    if($name != '04-events') return;
+
+    $result = $form->getChildByName('04-events');
+
+    // add four dummy inputfields
+    foreach(array_reverse(['one', 'two']) as $num) {
+      $f = $this->modules->get('InputfieldMarkup');
+      $f->label = $num;
+      $f->value = "Toggle me and watch events count";
+      $f->columnWidth(50);
+      $form->insertAfter($f, $result);
+    }
+  }
+);
