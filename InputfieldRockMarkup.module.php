@@ -33,18 +33,37 @@ class InputfieldRockMarkup extends InputfieldMarkup {
     parent::init();
     $folder = 'RockMarkup';
     $this->defaultPath = $this->toPath($this->config->paths->assets . $folder);
+
+    // hooks can be applied via files named like this: yourField.hook.php
+    $this->loadHooks();
   }
 
+  /**
+   * Load hooks
+   *
+   * @return void
+   */
+  public function loadHooks() {
+    $files = $this->files->find($this->config->paths->site, [
+      'extensions' => ['hooks'],
+      'excludeDirNames' => ['cache', 'files', 'backups'],
+    ]);
+    foreach($files as $file) {
+      $this->files->include($file, [
+        'wire' => $this->wire,
+      ]);
+    }
+  }
   
   public function renderReady(Inputfield $parent = null, $renderValueMode = false) {
     // load field-specific scripts and styles
     $file = $this->getFilePath().$this->name.'.js';
     if(is_file($file))
-      $this->config->scripts->add($this->getFileUrl().$this->name.'.js?t='.filemtime($file));
+      $this->config->scripts->add($this->toUrl($file).'?t='.filemtime($file));
       
     $file = $this->getFilePath().$this->name.'.css';
     if(is_file($file))
-      $this->config->scripts->add($this->getFileUrl().$this->name.'.css?t='.filemtime($file));
+      $this->config->styles->add($this->toUrl($file).'?t='.filemtime($file));
 
     return parent::renderReady($parent, $renderValueMode);
   }
@@ -67,7 +86,9 @@ class InputfieldRockMarkup extends InputfieldMarkup {
       // otherwise try to render the file
       try {
         $path = $this->getFilePath();
-        $out = $this->files->render($path.$this->name, [], [
+        $out = $this->files->render($path.$this->name, [
+          'that' => $this, // can be used to attach hooks
+        ], [
           'allowedPaths' => [$path],
         ]);
       } catch (\Throwable $th) {
@@ -90,8 +111,8 @@ class InputfieldRockMarkup extends InputfieldMarkup {
     if($this->noEvents) return;
 
     // javascript events are ON
-    // show spinner and fire init event
-    return "<script>$('#Inputfield_{$this->name}').trigger('RockMarkup.init');</script>";
+    // show spinner and fire loaded event
+    return "<script>$('#Inputfield_{$this->name}').trigger('loaded');</script>";
   }
 
   /**
@@ -143,7 +164,11 @@ class InputfieldRockMarkup extends InputfieldMarkup {
     $url = str_replace($this->config->paths->root, $this->config->urls->root, $path);
     $url = ltrim($url, "/");
     $url = rtrim($url,"/");
-    return "$url/";
+
+    // is it a file or a directory?
+    $info = pathinfo($url);
+    if(array_key_exists("extension", $info)) return "/$url";
+    else return "/$url/";
   }
 
   /**
@@ -154,6 +179,6 @@ class InputfieldRockMarkup extends InputfieldMarkup {
    */
   public function toPath($url) {
     $url = $this->toUrl($url);
-    return $this->config->paths->root.$url;
+    return $this->config->paths->root.ltrim($url,"/");
   }
 }
