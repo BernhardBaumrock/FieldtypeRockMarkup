@@ -18,11 +18,14 @@ class RockMarkupSandboxConfig extends ModuleConfig {
   public function getInputfields() {
     $inputfields = parent::getInputfields();
 
+    /** @var RockMarkupSandbox $rm */
+    $rm = $this->modules->get('RockMarkupSandbox');
+
     $f = $this->modules->get('InputfieldTextarea');
     $f->name = 'dirs';
     $f->label = 'Directories for the Sandbox Module';
     $f->description = 'Directories that are listed here will be listed in the Sandbox Module.';
-    $f->notes = "Enter one by line!\nWill always be appended: {$this->exampleDir}";
+    $f->notes = "Enter one by line!\nWill always be appended: {$rm->exampleDir}";
     $inputfields->add($f);
     
     return $inputfields;

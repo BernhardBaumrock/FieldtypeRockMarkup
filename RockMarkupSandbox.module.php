@@ -7,7 +7,7 @@
  */
 class RockMarkupSandbox extends Process {
 
-  private $exampleDir;
+  public $exampleDir;
   private $rm;
 
   /**
