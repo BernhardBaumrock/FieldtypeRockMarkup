@@ -27,15 +27,19 @@ class RockMarkupSandbox extends Process {
    */
   public function execute() {
     $name = $this->input->get('name', 'text');
+
+    // single example view
     if($name) {
       return $this->files->render(__DIR__ . '/views/renderExample', [
-        'sandbox' => $this,
+        'sandbox' => $this->modules->get($this->className),
         'name' => $name,
       ]);
     }
     
+    // list overview
     return $this->files->render(__DIR__ . '/views/execute', [
       'path' => __DIR__."/examples",
+      'sandbox' => $this->modules->get($this->className),
     ]);
   }
 

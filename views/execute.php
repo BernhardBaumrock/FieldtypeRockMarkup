@@ -1,11 +1,10 @@
 <p>
   Here you see all files inside folders that are listed in the 
-  <a href='<?= $this->config->urls->admin ?>module/edit?name=RockMarkupSandbox'>module's config</a>.
+  <a href='<?= $this->config->urls->admin ?>module/edit?name=<?= $sandbox->className ?>'>module's config</a>.
 </p>
 
 <ul uk-accordion>
   <?php
-  $sandbox = $this->modules->get('RockMarkupSandbox');
   $rm = $this->modules->get('InputfieldRockMarkup');
 
   foreach($sandbox->getExampleDirs() as $i=>$dir): ?>
