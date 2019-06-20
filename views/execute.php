@@ -1,6 +1,12 @@
 <p>
   Here you see all files inside folders that are listed in the 
   <a href='<?= $this->config->urls->admin ?>module/edit?name=<?= $sandbox->className ?>'>module's config</a>.
+
+  <?php
+  if($sandbox->className == 'RockTabulatorSandbox') {
+    echo 'See also <a href="../rockmarkup-sandbox/">the RockMarkup Sandbox</a>.';
+  }
+  ?>
 </p>
 
 <ul uk-accordion>
