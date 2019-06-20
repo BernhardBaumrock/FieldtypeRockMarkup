@@ -5,15 +5,23 @@ $form = $this->modules->get('InputfieldForm');
 $form->name = 'renderExample';
 $form->method = 'GET';
 
-// setup example path
-$path = $this->config->paths($sandbox)."examples/";
+// get path from url parameter
+$dir = $this->input->get('dir', 'int');
+$path = $sandbox->getExampleDirs($dir);
 $info = (object)pathinfo($name);
 
-// add hidden file field
+// add hidden name field
 $form->add([
   'type' => 'hidden',
   'name' => 'name',
   'value' => $info->filename,
+]);
+
+// add hidden dir field
+$form->add([
+  'type' => 'hidden',
+  'name' => 'dir',
+  'value' => $dir,
 ]);
 
 // ajax checkbox

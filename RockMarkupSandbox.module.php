@@ -7,11 +7,19 @@
  */
 class RockMarkupSandbox extends Process {
 
+  private $exampleDir;
+  private $rm;
+
   /**
    * Init. Optional.
    */
   public function init() {
     parent::init(); // always remember to call the parent init
+
+    // setup example dir
+    /** @var InputfieldRockMarkup $rm */
+    $this->rm = $this->modules->get('InputfieldRockMarkup');
+    $this->exampleDir = $this->rm->toUrl(__DIR__."/examples");
   }
 
   /**
@@ -42,11 +50,27 @@ class RockMarkupSandbox extends Process {
 
     $dirs = trim($dirs ?: $this->dirs);
     $dirs = explode("\n", $dirs);
-    foreach($dirs as $i=>$dir) {
+
+    // loop all lines
+    $arr = [];
+    foreach($dirs as $dir) {
+      if(!$dir) continue;
       // make sure it is a directory
-      $dirs[$i] = $rm->toUrl($dir);
+      $arr[] = $rm->toUrl($dir);
     }
-    return $dirs;
+    return $arr;
+  }
+
+  /**
+   * Get dirs including the example dir
+   * 
+   * @param int $index Element that should be returned
+   * @return array
+   */
+  public function getExampleDirs($index = null) {
+    $dirs = $this->getDirs();
+    $dirs[] = $this->exampleDir;
+    return $index !== null ? $dirs[$index] : $dirs;
   }
 
   /**
@@ -59,7 +83,8 @@ class RockMarkupSandbox extends Process {
    */
   public function renderCode($file) {
     $out = '';
-    $path = $this->config->paths($this)."examples/$file";
+    $dir = $this->rm->toPath($this->getExampleDirs($this->input->get('dir', 'int')));
+    $path = $dir.$file;
     
     // setup editor link
     $link = 'vscode://file/%file:%line';
@@ -74,8 +99,8 @@ class RockMarkupSandbox extends Process {
     "<tr>"
       ."<td class='uk-width-auto uk-text-nowrap'>Name</td>"
       ."<td class='uk-width-expand'><a href=# class='copy'>"
+        .'<i class="fa fa-clone uk-margin-small-right" aria-hidden="true"></i>'
         ."<span>$file</span>"
-        .'<i class="fa fa-clone uk-margin-small-left" aria-hidden="true"></i>'
       ."</a></td>"
     ."</tr>";
 
@@ -83,10 +108,19 @@ class RockMarkupSandbox extends Process {
       "<tr>"
         ."<td class='uk-width-auto uk-text-nowrap'>Inputfield ID</td>"
         ."<td class='uk-width-expand'><a href=# class='copy'>"
+          .'<i class="fa fa-clone uk-margin-small-right" aria-hidden="true"></i>'
           ."<span>#Inputfield_$file</span>"
-          .'<i class="fa fa-clone uk-margin-small-left" aria-hidden="true"></i>'
         ."</a></td>"
       ."</tr>";
+      
+    $out .=
+    "<tr>"
+      ."<td class='uk-width-auto uk-text-nowrap'>Directory</td>"
+      ."<td class='uk-width-expand'><a href=# class='copy'>"
+        .'<i class="fa fa-clone uk-margin-small-right" aria-hidden="true"></i>'
+        ."<span>$dir</span>"
+      ."</a></td>"
+    ."</tr>";
 
     // show code of all files
     foreach(['php', 'hooks', 'js', 'css'] as $ext) {

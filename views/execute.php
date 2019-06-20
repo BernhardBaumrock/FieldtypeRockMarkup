@@ -1,32 +1,32 @@
 <p>
   Here you see all files inside folders that are listed in the 
-  <a href='#'>module's config</a>.
+  <a href='<?= $this->config->urls->admin ?>module/edit?name=RockMarkupSandbox'>module's config</a>.
 </p>
 
 <ul uk-accordion>
   <?php
-  $dirs = $this->modules->get('RockMarkupSandbox')->getDirs();
+  $sandbox = $this->modules->get('RockMarkupSandbox');
   $rm = $this->modules->get('InputfieldRockMarkup');
-  foreach($dirs as $dir): ?>
+
+  foreach($sandbox->getExampleDirs() as $i=>$dir): ?>
     <li class="uk-open">
       <a class="uk-accordion-title" href="#"><?= $dir ?></a>
       <div class="uk-accordion-content">
-        <?= $rm->toPath($dir); ?>
+        <ul>
+          <?php
+          $path = $rm->toPath($dir);
+          foreach($this->files->find($path, [
+            'extensions' => ['php'],
+          ]) as $file) {
+            $info = (object)pathinfo($file);
+            $name = $info->filename;
+            echo "<li><a href='./?name=$name&dir=$i'>$name</a></li>";
+          }
+          ?>
+        </ul>
       </div>
     </li>
     <?php
   endforeach;
-  ?>
-</ul>
-
-<ul>
-  <?php
-  foreach($this->files->find($path, [
-    'extensions' => ['php'],
-  ]) as $file) {
-    $info = (object)pathinfo($file);
-    $name = $info->filename;
-    echo "<li><a href='./?name=$name'>$name</a></li>";
-  }
   ?>
 </ul>
