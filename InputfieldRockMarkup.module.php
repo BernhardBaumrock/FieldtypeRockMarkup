@@ -49,7 +49,7 @@ class InputfieldRockMarkup extends InputfieldMarkup {
       'excludeDirNames' => ['cache', 'files', 'backups'],
     ]);
     foreach($files as $file) {
-      $this->files->include($file, [
+      $this->files->includeOnce($file, [
         'wire' => $this->wire,
       ]);
     }

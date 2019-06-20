@@ -7,7 +7,7 @@ $this->addHookBefore(
     $name = $this->input->get('name', 'text');
     if($name != '04-events') return;
 
-    // add four dummy inputfield
+    // add dummy inputfield
     $f = $this->modules->get('InputfieldMarkup');
     $f->label = "Dummy";
     $f->value = "Toggle me and watch events in the console";
