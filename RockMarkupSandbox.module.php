@@ -127,23 +127,32 @@ class RockMarkupSandbox extends Process {
     ."</tr>";
 
     // show code of all files
-    foreach(['php', 'hooks', 'js', 'css'] as $ext) {
+    foreach(['md', 'php', 'hooks', 'js', 'css'] as $ext) {
       if(!is_file("$path.$ext")) continue;
       $lang = $ext;
       if($lang == 'hooks') $lang = 'php';
+      if($lang == 'md') $lang = '';
 
+      // setup editor link
       $url = str_replace("%file", "$path.$ext", $link);
       $url = str_replace("%line", "1", $url);
       $code = $this->sanitizer->entities(file_get_contents("$path.$ext"));
+      $code = "<pre class='uk-margin-small'><code class='$lang'>$code</code></pre>";
+
+      // markdown?
+      if($ext == 'md') {
+        require_once(__DIR__.'/lib/Parsedown.php');
+        $Parsedown = new \Parsedown();
+        $code = $Parsedown->text($this->files->render("$path.$ext"));
+      }
       
+      // add line to table
       $out .= "<tr>"
         ."<td class='uk-text-nowrap'>"
           .'<i class="fa fa-file-code-o uk-margin-small-right" aria-hidden="true"></i>'
           ."<a href='$url'>$file.$ext</a>"
         ."</td>"
-        ."<td>"
-          ."<pre class='uk-margin-small'><code class='$lang'>$code</code></pre>"
-        ."</td>"
+        ."<td>$code</td>"
         ."</tr>";
     }
     

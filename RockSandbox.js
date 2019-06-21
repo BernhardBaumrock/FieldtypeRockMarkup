@@ -4,25 +4,21 @@
  * You should delete it if you have no javascript to add.
  *
  */
-console.log('RockMarkupSandbox.js');
+console.log('RockSandbox.js');
+
+// log all events (before dom is ready)
+var logRockSandboxEvent = function(event, num) {
+  console.log('Event was fired:', event);
+}
+$(document).on('RockMarkup', function(event) { logRockSandboxEvent(event); });
+$(document).on('loaded', function(event) { logRockSandboxEvent(event); });
+$(document).on('size', function(event) { logRockSandboxEvent(event); });
+
 
 $(document).ready(function() {
   // submit form on AJAX setting change
   $('#Inputfield_ajax').change(function() {
     $(this).closest('form').submit();
-  });
-
-  // log all RockMarkup events to console
-  $('#Inputfield_04-events').on('load.RockMarkup', function(event) {
-    console.log('fired', event)
-  });
-
-  $("body").on('load.RockMarkup', function(event) {
-    console.log('fired on body', event)
-  });
-  
-  $(document).on('load.RockMarkup', function(event) {
-    console.log('fired on body', event)
   });
 
   // copy text on click
@@ -39,7 +35,7 @@ $(document).ready(function() {
 
     // show notification
     UIkit.notification({
-      message: 'copied to clipboard',
+      message: 'Copied to clipboard',
       timeout: 2000
     });
 

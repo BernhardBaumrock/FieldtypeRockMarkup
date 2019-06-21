@@ -35,11 +35,11 @@ $ajax->attr('checked', $isAjax ? 'checked' : '');
 $f = $this->modules->get('InputfieldMarkup');
 $f->name = 'navbar';
 $f->value =
-  "<div class='uk-child-width-1-1 uk-child-width-1-2@m' uk-grid>"
-    ."<div class='uk-text-center uk-text-left@m'>"
+  "<div class='uk-child-width-1-2' uk-grid>"
+    ."<div class='uk-text-left'>"
       ."<a href='./'><i class='fa fa-arrow-left' aria-hidden='true'></i> Zurück</a>"
     ."</div>"
-    ."<div class='uk-text-center uk-text-right@m'>"
+    ."<div class='uk-text-right'>"
       .$ajax->render()
     ."</div>"
   ."</div>";
@@ -48,7 +48,7 @@ $form->add($f);
 
 // add rendered grid
 $form->add([
-  'type' => 'RockMarkup',
+  'type' => str_replace('Sandbox', '', $sandbox->className),
   'name' => $info->filename,
   'path' => $path,
   'label' => 'Result',
@@ -58,7 +58,7 @@ $form->add([
 // add code
 $form->add([
   'type' => 'markup',
-  'name' => $info->filename.'_code',
+  'name' => 'code_'.$info->filename,
   'label' => '',
   'icon' => 'code',
   'value' => $sandbox->renderCode($info->filename),

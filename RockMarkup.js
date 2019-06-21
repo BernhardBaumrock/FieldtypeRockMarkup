@@ -39,7 +39,7 @@ RockMarkup.prototype.debounce = function(func, wait, immediate) {
 var RockMarkup = new RockMarkup();
 
 // show that this file was loaded
-RockMarkup.log('InputfieldRockMarkup.js');
+RockMarkup.log('RockMarkup.js');
 
 $(document).ready(function() {
   /**
