@@ -38,6 +38,13 @@ class InputfieldRockMarkup extends InputfieldMarkup {
     $this->config->scripts->add($this->toUrl(__DIR__ . '/RockSandbox.js'));
     $this->config->styles->add($this->toUrl(__DIR__ . '/RockSandbox.css'));
 
+    // add the RockMarkup class to this field
+    // this class is also added from derived fields (like RockTabulator)
+    // and makes sure that all events are fired properly
+    // must load before RockTabulator.js
+    $this->addClass('RockMarkup');
+    $this->config->scripts->add($this->toUrl(__DIR__.'/RockMarkup.js'));
+
     // hooks can be applied via files named like this: yourField.hook.php
     $this->loadHooks();
   }
@@ -65,13 +72,6 @@ class InputfieldRockMarkup extends InputfieldMarkup {
    * MUST NOT be hookable!
    */
   public function renderReady(Inputfield $parent = null, $renderValueMode = false) {
-    // add the RockMarkup class to this field
-    // this class is also added from derived fields (like RockTabulator)
-    // and makes sure that all events are fired properly
-    $this->addClass('RockMarkup');
-    $this->config->scripts->add($this->toUrl(__DIR__.'/RockMarkup.js'));
-
-
     // load field-specific scripts and styles
     $file = $this->getFilePath().$this->name.'.js';
     if(is_file($file))
