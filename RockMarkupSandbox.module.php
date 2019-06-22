@@ -27,6 +27,8 @@ class RockMarkupSandbox extends Process {
    */
   public function execute() {
     $name = $this->input->get('name', 'text');
+    $this->headline($name);
+    $this->browserTitle("Sandbox: $name");
 
     // single example view
     if($name) {
