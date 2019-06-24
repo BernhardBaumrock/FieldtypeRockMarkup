@@ -92,8 +92,8 @@ class InputfieldRockMarkup extends InputfieldMarkup {
   public function ___render() {
     $this->setLabel();
 
-    $content = $this->___getContent();
-    $script = $this->___getScriptTag();
+    $content = $this->getContent();
+    $script = $this->getScriptTag();
     return $content.$script;
   }
 
@@ -139,7 +139,7 @@ class InputfieldRockMarkup extends InputfieldMarkup {
    * @param string $out
    * @return void
    */
-  protected function ___getScriptTag() {
+  public function ___getScriptTag() {
     // if javascript events are disabled we return the original markup
     // not implemented yet
     if($this->noEvents) return;
