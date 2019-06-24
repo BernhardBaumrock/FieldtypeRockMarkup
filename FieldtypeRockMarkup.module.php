@@ -16,12 +16,6 @@ class FieldtypeRockMarkup extends Fieldtype {
   }
 
   /**
-   * attach pagerender hook when api is ready
-   */
-  public function ready() {
-  }
-
-  /**
    * Return the associated Inputfield
    */
   public function getInputfield(Page $page, Field $field) {
