@@ -1,11 +1,11 @@
 <?php namespace ProcessWire;
 /**
- * RockMarkupSandbox Config
+ * ProcessRockMarkup Config
  *
  * @author Bernhard Baumrock, 18.06.2019
  * @license Licensed under MIT
  */
-class RockMarkupSandboxConfig extends ModuleConfig {
+class ProcessRockMarkupConfig extends ModuleConfig {
 
   public function __construct() {
     // sanitize directories
@@ -18,8 +18,8 @@ class RockMarkupSandboxConfig extends ModuleConfig {
   public function getInputfields() {
     $inputfields = parent::getInputfields();
 
-    /** @var RockMarkupSandbox $rm */
-    $rm = $this->modules->get('RockMarkupSandbox');
+    /** @var ProcessRockMarkup $rm */
+    $rm = $this->modules->get('ProcessRockMarkup');
 
     $f = $this->modules->get('InputfieldTextarea');
     $f->name = 'dirs';
@@ -41,8 +41,8 @@ class RockMarkupSandboxConfig extends ModuleConfig {
     $f = $event->object;
     if(!$f->value) return;
     
-    /** @var RockMarkupSandbox $rm */
-    $rm = $this->modules->get('RockMarkupSandbox');
+    /** @var ProcessRockMarkup $rm */
+    $rm = $this->modules->get('ProcessRockMarkup');
     $dirs = $rm->getDirs($f->value);
 
     $f->value = implode("\n", $dirs);

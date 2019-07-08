@@ -1,20 +1,20 @@
 <?php namespace ProcessWire;
 /**
- * RockMarkupSandbox Info
+ * ProcessRockMarkup Info
  *
  * @author Bernhard Baumrock, 18.06.2019
  * @license Licensed under MIT
  */
 $info = [
-  'title' => 'RockMarkup Sandbox',
-  'summary' => 'RockMarkup Sandbox Process Module.',
+  'title' => 'ProcessRockMarkup',
+  'summary' => 'RockMarkup Process Module.',
   'version' => 1,
   'author' => 'Bernhard Baumrock',
   'icon' => 'bolt',
   'requires' => ['InputfieldRockMarkup'],
   'page' => [
-    'name' => 'rockmarkup-sandbox',
-    'title' => 'RockMarkup Sandbox',
+    'name' => 'rockmarkup',
+    'title' => 'RockMarkup',
     'parent' => 'setup',
   ],
 ];

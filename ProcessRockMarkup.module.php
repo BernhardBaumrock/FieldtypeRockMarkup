@@ -1,11 +1,11 @@
 <?php namespace ProcessWire;
 /**
- * RockMarkupSandbox Module
+ * ProcessRockMarkup Module
  *
  * @author Bernhard Baumrock, 18.06.2019
  * @license Licensed under MIT
  */
-class RockMarkupSandbox extends Process {
+class ProcessRockMarkup extends Process {
 
   public $exampleDir;
   private $rm;
