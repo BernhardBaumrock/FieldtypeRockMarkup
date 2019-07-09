@@ -3,8 +3,8 @@
   <a href='<?= $this->config->urls->admin ?>module/edit?name=<?= $sandbox->className ?>'>module's config</a>.
 
   <?php
-  if($sandbox->className == 'RockTabulatorSandbox') {
-    echo 'See also <a href="../rockmarkup-sandbox/">the RockMarkup Sandbox</a>.';
+  if($sandbox->className == 'ProcessRockTabulator') {
+    echo 'See also <a href="../rockmarkup/">the RockMarkup Sandbox</a>.';
   }
   ?>
 </p>
